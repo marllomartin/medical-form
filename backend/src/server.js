@@ -13,7 +13,7 @@ const validateDoctor = require('./middlewares/validateDoctor')
 const port = process.env.PORT;
 
 app.get('/doctors', findAllDoctors);
-app.get('/doctors/crm', findByCrmDoctor);
+app.get('/doctors/:crm', findByCrmDoctor);
 app.post('/doctors', validateDoctor, createDoctor);
 app.patch('/doctors/:id', updateDoctor);
 app.delete('/doctors/:id', deleteDoctor);
