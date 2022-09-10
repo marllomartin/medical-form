@@ -10,11 +10,11 @@ const findAllDoctors = async (_req, res) => {
   }
 };
 
-const findByIdDoctor = async (req, res) => {
-  const { id } = req.params;
+const findByCrmDoctor = async (req, res) => {
+  const { crm } = req.body;
 
   try {
-    const result = await DoctorService.findByIdDoctor(id);
+    const result = await DoctorService.findByCrmDoctor(crm);
     return res.status(StatusCodes.OK).send(result);
   } catch (Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: Error.message });
@@ -57,7 +57,7 @@ const deleteDoctor = async (req, res) => {
 
 module.exports = {
   findAllDoctors,
-  findByIdDoctor,
+  findByCrmDoctor,
   createDoctor,
   updateDoctor,
   deleteDoctor,
