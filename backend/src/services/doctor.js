@@ -6,8 +6,8 @@ const findAllDoctors = async () => {
   return findDoctors;
 };
 
-const findByIdDoctor = async (id) => {
-  const findDoctor = await doctor.findByPk(id);
+const findByCrmDoctor = async (crm) => {
+  const findDoctor = await doctor.findOne({ where: { crm } });
 
   return findDoctor;
 };
@@ -36,7 +36,7 @@ const deleteDoctor = async (id) => {
 
 module.exports = {
   findAllDoctors,
-  findByIdDoctor,
+  findByCrmDoctor,
   createDoctor,
   updateDoctor,
   deleteDoctor,
