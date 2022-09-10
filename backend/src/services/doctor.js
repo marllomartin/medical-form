@@ -8,11 +8,16 @@ const findAllDoctors = async () => {
 
 const findByCrmDoctor = async (crm) => {
   const findDoctor = await doctor.findOne({ where: { crm } });
+  if (!findDoctor) throw new Error('Médico não encontrado');
 
   return findDoctor;
 };
 
 const createDoctor = async (newDoctor) => {
+  const { crm } = newDoctor;
+  const doctorExists = await doctor.findOne({ where: { crm } });
+  if (doctorExists) throw new Error('Médico já registrado');
+
   const createdDoctor = await doctor.create(newDoctor);
 
   return createdDoctor;
