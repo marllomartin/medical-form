@@ -6,7 +6,7 @@ module.exports = {
       {
         id: 1,
         name: 'Leila Martinez',
-        crm: 'CRM/SP 123456',
+        crm: '111111',
         phone: '+55(11)91234-5678',
         expertise: 'Fonoaudiologia',
         createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
@@ -15,7 +15,7 @@ module.exports = {
       {
         id: 2,
         name: 'Marcos da Silva Passos',
-        crm: 'CRM/RN 123456',
+        crm: '222222',
         phone: '+55(84)91234-5678',
         expertise: 'Fonoaudiologia',
         createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
@@ -24,7 +24,7 @@ module.exports = {
       {
         id: 3,
         name: 'Fulano Gomes',
-        crm: 'CRM/RJ 123456',
+        crm: '333333',
         phone: '+55(21)91234-5678',
         expertise: 'Fonoaudiologia',
         createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
