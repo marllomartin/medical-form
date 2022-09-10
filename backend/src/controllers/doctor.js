@@ -11,7 +11,7 @@ const findAllDoctors = async (_req, res) => {
 };
 
 const findByCrmDoctor = async (req, res) => {
-  const { crm } = req.body;
+  const { crm } = req.params;
 
   try {
     const result = await DoctorService.findByCrmDoctor(crm);
