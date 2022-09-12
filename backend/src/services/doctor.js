@@ -6,13 +6,6 @@ const findAllDoctors = async () => {
   return findDoctors;
 };
 
-const findByCrmDoctor = async (crm) => {
-  const findDoctor = await doctor.findOne({ where: { crm } });
-  if (!findDoctor) throw new Error('Médico não encontrado');
-
-  return findDoctor;
-};
-
 const createDoctor = async (newDoctor) => {
   const { crm } = newDoctor;
   const doctorExists = await doctor.findOne({ where: { crm } });
@@ -41,7 +34,6 @@ const deleteDoctor = async (id) => {
 
 module.exports = {
   findAllDoctors,
-  findByCrmDoctor,
   createDoctor,
   updateDoctor,
   deleteDoctor,

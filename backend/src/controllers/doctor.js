@@ -10,17 +10,6 @@ const findAllDoctors = async (_req, res) => {
   }
 };
 
-const findByCrmDoctor = async (req, res) => {
-  const { crm } = req.params;
-
-  try {
-    const result = await DoctorService.findByCrmDoctor(crm);
-    return res.status(StatusCodes.OK).send(result);
-  } catch (Error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: Error.message });
-  }
-};
-
 const createDoctor = async (req, res) => {
   const newDoctor = req.body;
 
@@ -57,7 +46,6 @@ const deleteDoctor = async (req, res) => {
 
 module.exports = {
   findAllDoctors,
-  findByCrmDoctor,
   createDoctor,
   updateDoctor,
   deleteDoctor,
