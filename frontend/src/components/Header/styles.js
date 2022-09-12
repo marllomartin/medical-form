@@ -4,7 +4,7 @@ export const Container = styled.header`
   width: 100vw;
   height: 50px;
   padding: 0px 20px;
-  margin-top: 20px;
+  margin-top: 25px;
   margin-bottom: 20px;
   justify-content: center;
   display: flex;
@@ -12,6 +12,6 @@ export const Container = styled.header`
   & h2 {
     font-size: 35px;
     text-align: center;
-    color: #000;
+    color: #3d495c;
   }
 `;
