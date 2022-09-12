@@ -1,19 +1,17 @@
 import React from 'react'
 import Header from '../Header'
-import AddDoctor from '../AddDoctor'
-import SearchDoctor from '../SearchDoctor'
+import DoctorForm from '../DoctorForm'
+import DoctorsTable from '../DoctorsTable'
 
-import { ButtonContainer, Container } from './styles'
+import { Container } from './styles'
 
 export default function Layout() {
   return (
     <>
       <Container>
         <Header />
-        <ButtonContainer>
-          <AddDoctor />
-          <SearchDoctor />
-        </ButtonContainer>
+        <DoctorForm />
+        <DoctorsTable />
       </Container>
     </>
   )
