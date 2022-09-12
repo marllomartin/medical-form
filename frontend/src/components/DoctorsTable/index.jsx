@@ -1,38 +1,62 @@
-import React from "react";
+import React, { useContext } from "react";
+import { DoctorContext } from "../../context/DoctorContext";
 import { useAxios } from "../../hooks/useAxios";
-import DoctorsData from "../DoctorsData";
 
-import { Table } from "./styles";
+import { IoPencil, IoClose } from "react-icons/io5"
+import { ButtonArea, Container, Table } from "./styles";
 
 export default function DoctorsTable() {
+  const { search, handleEdit, handleDelete } = useContext(DoctorContext);
 
   const { data } = useAxios("doctors");
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>CRM</th>
-          <th>Telefone</th>
-          <th>Especialidades</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          data?.map((doctor) => (
-            <DoctorsData
-              key={doctor.id ? doctor.id : Math.random()}
-              id={doctor.id}
-              name={doctor.name}
-              crm={doctor.crm}
-              phone={doctor.phone}
-              expertise={doctor.expertise}
-            />
-          ))
-        }
-      </tbody>
-    </Table>
+    <Container>
+      <header>Médicos Cadastrados</header>
+      <Table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>UF</th>
+            <th>CRM</th>
+            <th>Telefone</th>
+            <th>Especialidades</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            data?.filter((doctor) =>
+              doctor.name.toLowerCase().includes(search.toLowerCase()) ||
+              doctor.crm.toLowerCase().includes(search)
+            ).map((doctor) => (
+              <tr key={doctor.id}>
+                <td>{doctor.name}</td>
+                <td>{doctor.uf}</td>
+                <td>{doctor.crm}</td>
+                <td>{doctor.phone}</td>
+                <td>{doctor.expertise}</td>
+                <td>
+                  <ButtonArea>
+                    <button
+                      onClick={() => handleEdit(doctor.id, doctor.name, doctor.uf, doctor.crm, doctor.phone, doctor.expertise)}
+                      className="button-edit"
+                    >
+                      <IoPencil />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(doctor.id)}
+                      className="button-delete"
+                    >
+                      <IoClose />
+                    </button>
+                  </ButtonArea>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </Table>
+    </Container>
   )
 }
