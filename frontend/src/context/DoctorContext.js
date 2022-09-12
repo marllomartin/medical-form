@@ -1,31 +1,23 @@
 import React, { createContext, useState } from "react";
 import PropTypes from "prop-types";
-import AddModal from "../components/AddModal";
-import SearchModal from "../components/SearchModal";
 import api from "../services/api";
+import { useAxios } from "../hooks/useAxios";
 
 export const DoctorContext = createContext();
 
 export function DoctorContextProvider({ children }) {
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const [openSearchModal, setOpenSearchModal] = useState(false);
+  const { data, mutate } = useAxios("doctors");
 
   const [name, setName] = useState("");
   const [crm, setCrm] = useState("");
   const [phone, setPhone] = useState("");
   const [expertise, setExpertise] = useState([])
 
+  const [isEditing, setIsEditing] = useState(false);
+
   const [search, setSearch] = useState("");
 
-  function handleAddDoctor() {
-    setOpenAddModal(true);
-    setOpenSearchModal(false);
-  }
-
-  function handleSearchDoctor() {
-    setOpenSearchModal(true);
-    setOpenAddModal(false);
-  }
+  const [id, setId] = useState(false);
 
   function handleChangeName(event) {
     setName(event.target.value);
@@ -47,73 +39,60 @@ export function DoctorContextProvider({ children }) {
     setSearch(event.target.value);
   }
 
-  function handleCloseAddModal() {
-    if (name) {
-      setName("");
-    }
-    if (crm) {
-      setCrm("");
-    }
-    if (phone) {
-      setPhone("");
-    }
-    if (expertise) {
-      setExpertise([]);
-    }
-    setOpenAddModal(false);
+  function handleEdit(id, name, crm, phone, expertise) {
+    setIsEditing(true);
+    setId(id);
+    setName(name);
+    setCrm(crm);
+    setPhone(phone);
+    setExpertise(expertise);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const data = { name, crm, phone, expertise };
-    api.post("doctors", data);
+    if (id) {
+      api.patch(`doctors/${id}`, { name, crm, phone, expertise })
+
+    } else {
+      api.post("doctors", { name, crm, phone, expertise });
+    }
 
     setName("");
     setCrm("");
     setPhone("")
     setExpertise([]);
-    setOpenAddModal(false);
-  }
-
-  function handleCloseSearchModal() {
-    if (search) {
-      setSearch("");
-    }
-
-    setOpenSearchModal(false);
-  }
-
-  function handleSearch(search) {
-    api.get(`doctors/${search}`)
+    setId(false);
+    setIsEditing(false);
   }
 
   function handleDelete(id) {
     api.delete(`doctors/${id}`);
+
+    const updatedDoctors = data?.filter((doctor) => doctor.id !== id);
+
+    mutate(updatedDoctors, false);
   }
 
   return (
     <DoctorContext.Provider value={{
-      handleAddDoctor,
-      handleSearchDoctor,
-      handleCloseAddModal,
-      handleCloseSearchModal,
       handleChangeName,
       handleChangeCrm,
       handleChangePhone,
       handleChangeExpertise,
       handleChangeSearch,
+      handleEdit,
       handleSubmit,
-      handleSearch,
       handleDelete,
       name, setName,
       crm, setCrm,
       phone, setPhone,
-      expertise, setExpertise
+      expertise, setExpertise,
+      isEditing, setIsEditing,
+      search, setSearch,
+      id, setId
     }}>
       {children}
-      {openAddModal && <AddModal />}
-      {openSearchModal && <SearchModal />}
     </DoctorContext.Provider>
   )
 }
