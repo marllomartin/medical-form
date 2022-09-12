@@ -11,6 +11,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      uf: {
+        type: Sequelize.STRING
+      },
       crm: {
         type: Sequelize.STRING
       },
