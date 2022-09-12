@@ -9,6 +9,10 @@ const Doctor = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
+    uf: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     crm: {
       allowNull: false,
       type: DataTypes.STRING,
