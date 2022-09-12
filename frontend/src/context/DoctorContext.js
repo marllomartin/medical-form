@@ -9,6 +9,7 @@ export function DoctorContextProvider({ children }) {
   const { data, mutate } = useAxios("doctors");
 
   const [name, setName] = useState("");
+  const [uf, setUf] = useState("AC");
   const [crm, setCrm] = useState("");
   const [phone, setPhone] = useState("");
   const [expertise, setExpertise] = useState([])
@@ -21,6 +22,10 @@ export function DoctorContextProvider({ children }) {
 
   function handleChangeName(event) {
     setName(event.target.value);
+  }
+
+  function handleChangeUf(event) {
+    setUf(event.target.value);
   }
 
   function handleChangeCrm(event) {
@@ -39,10 +44,11 @@ export function DoctorContextProvider({ children }) {
     setSearch(event.target.value);
   }
 
-  function handleEdit(id, name, crm, phone, expertise) {
+  function handleEdit(id, name, uf, crm, phone, expertise) {
     setIsEditing(true);
     setId(id);
     setName(name);
+    setUf(uf);
     setCrm(crm);
     setPhone(phone);
     setExpertise(expertise);
@@ -52,10 +58,24 @@ export function DoctorContextProvider({ children }) {
     event.preventDefault();
 
     if (id) {
-      api.patch(`doctors/${id}`, { name, crm, phone, expertise })
+      api.patch(`doctors/${id}`, { name, uf, crm, phone, expertise })
 
+      const updatedList =
+        data.map((doctor) => {
+          if (doctor.id === id) {
+            return { ...doctor, name, crm, phone, expertise };
+          }
+          return doctor;
+        });
+
+      mutate(updatedList, false);
     } else {
-      api.post("doctors", { name, crm, phone, expertise });
+      const doctor = { name, uf, crm, phone, expertise };
+      api.post("doctors", doctor);
+
+      const updatedList = [...data, doctor];
+
+      mutate(updatedList, false);
     }
 
     setName("");
@@ -69,14 +89,22 @@ export function DoctorContextProvider({ children }) {
   function handleDelete(id) {
     api.delete(`doctors/${id}`);
 
-    const updatedDoctors = data?.filter((doctor) => doctor.id !== id);
+    const updatedList = data?.filter((doctor) => doctor.id !== id);
 
-    mutate(updatedDoctors, false);
+    mutate(updatedList, false);
+
+    setName("");
+    setCrm("");
+    setPhone("")
+    setExpertise([]);
+    setId(false);
+    setIsEditing(false);
   }
 
   return (
     <DoctorContext.Provider value={{
       handleChangeName,
+      handleChangeUf,
       handleChangeCrm,
       handleChangePhone,
       handleChangeExpertise,
@@ -85,6 +113,7 @@ export function DoctorContextProvider({ children }) {
       handleSubmit,
       handleDelete,
       name, setName,
+      uf, setUf,
       crm, setCrm,
       phone, setPhone,
       expertise, setExpertise,
