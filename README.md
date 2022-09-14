@@ -1,7 +1,5 @@
 # Formulário Médico
-<div align="center">
-<img src=https://i.imgur.com/UGAHSfu.png>
-</div>
+![Interface](https://i.imgur.com/UGAHSfu.png)
 
 ## Tecnologias Utilizadas
 * [JavaScript](https://www.javascript.com/)
