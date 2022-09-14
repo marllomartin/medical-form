@@ -34,7 +34,15 @@ module.exports = {
         {
           doctorId: 4,
           expertiseId: 2,
-        }
+        },
+        {
+          doctorId: 5,
+          expertiseId: 7,
+        },
+        {
+          doctorId: 5,
+          expertiseId: 4,
+        },
       ], { timestamps: false });
   },
 
