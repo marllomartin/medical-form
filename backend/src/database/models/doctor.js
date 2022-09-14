@@ -20,10 +20,6 @@ const Doctor = (sequelize, DataTypes) => {
     phone: {
       allowNull: false,
       type: DataTypes.STRING,
-    },
-    expertise: {
-      allowNull: false,
-      type: DataTypes.STRING,
     }
   });
   return Doctor;
