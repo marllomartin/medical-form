@@ -1,19 +1,35 @@
-const { doctor } = require('../database/models');
+const { doctor, doctorExpertise, expertise } = require('../database/models');
 
 const findAllDoctors = async () => {
-  const findDoctors = await doctor.findAll();
+  const findDoctors = await doctor.findAll({
+    include: [
+      { model: expertise, as: 'expertises' },
+    ],
+  });
 
   return findDoctors;
 };
 
-const createDoctor = async (newDoctor) => {
-  const { crm } = newDoctor;
+const createDoctor = async (data) => {
+  const { name, uf, crm, phone, expertises } = data;
   const doctorExists = await doctor.findOne({ where: { crm } });
   if (doctorExists) throw new Error('Médico já registrado');
 
-  const createdDoctor = await doctor.create(newDoctor);
+  const newDoctor = await doctor.create({
+    name,
+    uf,
+    crm,
+    phone
+  });
 
-  return createdDoctor;
+  const newDoctorExpertise = await expertises.map((x) => ({
+    doctorId: newDoctor.id,
+    expertiseId: x.id
+  }))
+
+  await doctorExpertise.bulkCreate(newDoctorExpertise)
+
+  return newDoctor;
 };
 
 const updateDoctor = async (id, data) => {
