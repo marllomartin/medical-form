@@ -3,7 +3,8 @@ import { DoctorContext } from "../../context/DoctorContext";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css'
 
-import { ButtonArea, Container, Form, InputContainer, InputGroup } from "./styles";
+import { ButtonArea, Container, Form, InputContainer, InputGroup, SelectContainer } from "./styles";
+import { useAxios } from "../../hooks/useAxios";
 
 export default function DoctorForm() {
 
@@ -14,9 +15,12 @@ export default function DoctorForm() {
     uf, handleChangeUf,
     crm, handleChangeCrm,
     phone, setPhone,
-    expertise, handleChangeExpertise,
+    firstExpertise, handleChangeFirstExpertise,
+    secondExpertise, handleChangeSecondExpertise,
     isEditing, handleSubmit
   } = useContext(DoctorContext);
+
+  const { data } = useAxios("expertises");
 
   return (
     <Container>
@@ -64,27 +68,50 @@ export default function DoctorForm() {
           <InputGroup>
             <label htmlFor="phone">Telefone: </label>
             <PhoneInput
+              country="BR"
               defaultCountry="BR"
               value={phone}
               placeholder="DD + Número"
               onChange={setPhone}
+              required={true}
             />
           </InputGroup>
         </InputContainer>
-        <label htmlFor="expertise">Especialidades: </label>
-        <input
-          id="expertise"
-          type="text"
-          placeholder="Ex: Pediatria, Fonoaudiologia"
-          value={expertise}
-          onChange={handleChangeExpertise}
-          required={true}
-        />
+        <InputGroup>
+          <label htmlFor="expertise">Especialidades: </label>
+          <SelectContainer>
+            <select
+              id="expertise"
+              value={firstExpertise}
+              onChange={handleChangeFirstExpertise}
+              required={true}
+            >
+              {data?.map((expertise) => (
+                <option value={expertise.id} key={expertise.id}>
+                  {expertise.name}
+                </option>
+              ))}
+            </select>
+            <select
+              id="secondExpertise"
+              value={secondExpertise}
+              onChange={handleChangeSecondExpertise}
+              required={true}
+            >
+              {data?.map((expertise) => (
+                <option value={expertise.id} key={expertise.id}>
+                  {expertise.name}
+                </option>
+              ))}
+            </select>
+          </SelectContainer>
+        </InputGroup>
         <ButtonArea>
           <button
-            className="button"
             onClick={handleSubmit}
+            className="button"
             data-edit={isEditing}
+            disabled={firstExpertise === secondExpertise}
           >
             {isEditing ? "Editar" : "Cadastrar"}
           </button>

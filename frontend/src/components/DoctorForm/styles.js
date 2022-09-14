@@ -56,13 +56,20 @@ export const InputGroup = styled.div`
     width: 100%;
     min-width: 80px;
     padding-left: 10px;
+    margin: 5px;
   }
+`
+
+export const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 `
 
 export const ButtonArea = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 10px;
 
   button {
@@ -76,6 +83,11 @@ export const ButtonArea = styled.div`
     margin-bottom: 10px;
     color: white;
     text-transform: uppercase;
+  }
+
+  .button:disabled {
+    background-color: #b7b7b7;
+    pointer-events: none;
   }
 
   .button[data-edit="false"] {
