@@ -4,11 +4,11 @@ const validateDoctor = (req, res, next) => {
   const {
     name,
     crm,
-    expertise,
+    expertises,
     phone,
   } = req.body;
 
-  if (!name || !crm || !expertise || !phone) {
+  if (!name || !crm || !expertises || !phone) {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Requisição inválida' });
   }
 
