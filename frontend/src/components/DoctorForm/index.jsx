@@ -87,7 +87,10 @@ export default function DoctorForm() {
               required={true}
             >
               {data?.map((expertise) => (
-                <option value={expertise.id} key={expertise.id}>
+                <option
+                  key={expertise.id}
+                  value={expertise.id}
+                >
                   {expertise.name}
                 </option>
               ))}
