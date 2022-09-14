@@ -30,7 +30,7 @@ export default function DoctorsTable() {
               doctor.name.toLowerCase().includes(search.toLowerCase()) ||
               doctor.crm.includes(search)
             ).map((doctor) => (
-              <tr key={doctor.id}>
+              <tr key={doctor.id ? doctor.id : Math.random()}>
                 <td>{doctor.name}</td>
                 <td>{doctor.uf}</td>
                 <td>{doctor.crm}</td>
@@ -50,7 +50,7 @@ export default function DoctorsTable() {
                       <IoPencil />
                     </button>
                     <button
-                      onClick={() => handleDelete(doctor.id)}
+                      onClick={() => { handleDelete(doctor.id) }}
                       className="button-delete"
                     >
                       <IoClose />
