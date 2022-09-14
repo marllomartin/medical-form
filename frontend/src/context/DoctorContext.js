@@ -12,14 +12,15 @@ export function DoctorContextProvider({ children }) {
   const [uf, setUf] = useState("AC");
   const [crm, setCrm] = useState("");
   const [phone, setPhone] = useState("");
-  const [firstExpertise, setFirstExpertise] = useState("")
-  const [secondExpertise, setSecondExpertise] = useState("");
+  const [firstExpertise, setFirstExpertise] = useState("1")
+  const [secondExpertise, setSecondExpertise] = useState("1");
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [search, setSearch] = useState("");
 
   const [id, setId] = useState(false);
+
 
   function handleChangeName(event) {
     setName(event.target.value);
@@ -64,19 +65,17 @@ export function DoctorContextProvider({ children }) {
     event.preventDefault();
 
     const expertises = [
-      {id: firstExpertise},
-      {id: secondExpertise}
+      { id: firstExpertise },
+      { id: secondExpertise }
     ];
 
     if (id) {
-      
-      const doctor = { name, uf, crm, phone, expertises };
-      api.patch(`doctors/${id}`, doctor);
+      api.patch(`doctors/${id}`, { name, uf, crm, phone, expertises });
 
       const updatedList =
         data.map((doctor) => {
           if (doctor.id === id) {
-            return { ...doctor, name, uf, crm, phone };
+            return { ...doctor, name, uf, crm, phone, expertises };
           }
           return doctor;
         });
@@ -87,7 +86,7 @@ export function DoctorContextProvider({ children }) {
       api.post("doctors", { name, uf, crm, phone, expertises });
 
       const updatedList = [...data, doctor];
-
+      
       mutate(updatedList, false);
     }
 
