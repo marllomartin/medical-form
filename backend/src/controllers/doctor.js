@@ -11,10 +11,10 @@ const findAllDoctors = async (_req, res) => {
 };
 
 const createDoctor = async (req, res) => {
-  const newDoctor = req.body;
+  const data = req.body;
 
   try {
-    const result = await DoctorService.createDoctor(newDoctor);
+    const result = await DoctorService.createDoctor(data);
     return res.status(StatusCodes.CREATED).send(result);
   } catch (Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: Error.message });
