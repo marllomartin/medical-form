@@ -29,7 +29,9 @@ Caso tenha o Docker configurado em sua máquina, o `docker-compose` fará as orq
 ### Clonando o projeto:
 ```
 git clone git@github.com:marllomartin/medical-form.git
-
+```
+### Acessando a pasta do projeto:
+```
 cd medical-form
 ```
 ### Inicializando o Docker
@@ -42,10 +44,11 @@ docker-compose up --build
 ### Clonando o projeto:
 ```
 git clone git@github.com:marllomartin/medical-form.git
-
+```
+### Acessando a pasta do projeto:
+```
 cd medical-form
 ```
-
 
 ### Inicializando o Back-End:
 #### Atenção!
