@@ -28,18 +28,23 @@ export default function DoctorsTable() {
           {
             data?.filter((doctor) =>
               doctor.name.toLowerCase().includes(search.toLowerCase()) ||
-              doctor.crm.toLowerCase().includes(search)
+              doctor.crm.includes(search)
             ).map((doctor) => (
               <tr key={doctor.id}>
                 <td>{doctor.name}</td>
                 <td>{doctor.uf}</td>
                 <td>{doctor.crm}</td>
                 <td>{doctor.phone}</td>
-                <td>{doctor.expertise}</td>
+                <td>{doctor.expertises[0].name}, {doctor.expertises[1].name}</td>
                 <td>
                   <ButtonArea>
                     <button
-                      onClick={() => handleEdit(doctor.id, doctor.name, doctor.uf, doctor.crm, doctor.phone, doctor.expertise)}
+                      onClick={() =>
+                        handleEdit(doctor.id, doctor.name,
+                          doctor.uf, doctor.crm, doctor.phone,
+                          doctor.expertises[0].id, doctor.expertises[1].id
+                        )
+                      }
                       className="button-edit"
                     >
                       <IoPencil />
