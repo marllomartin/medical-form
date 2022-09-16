@@ -1,6 +1,14 @@
 # Formulário Médico
 ![Interface](https://i.imgur.com/UGAHSfu.png)
 
+## Funcionalidades
+- Realizar o cadastro de um médico;
+- Visualizar uma tabela com os dados de todos os médicos cadastrados;
+- Pesquisar médicos cadastrados por nome ou código CRM;
+- Atualizar um registro dos médicos cadastrados;
+- Excluir um registro de um médico cadastrado;
+- Deletar tarefas
+
 ## Tecnologias Utilizadas
 * [JavaScript](https://www.javascript.com/)
 * [Docker](https://www.docker.com/)
