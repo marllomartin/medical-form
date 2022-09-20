@@ -71,7 +71,7 @@ export default function DoctorForm() {
               country="BR"
               defaultCountry="BR"
               value={phone}
-              placeholder="DD + Número"
+              placeholder="DDD + Número"
               onChange={setPhone}
               required={true}
             />
