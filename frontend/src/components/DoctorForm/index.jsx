@@ -5,6 +5,7 @@ import 'react-phone-number-input/style.css'
 
 import { ButtonArea, Container, Form, InputContainer, InputGroup, SelectContainer } from "./styles";
 import { createDoctor, getDoctors, getExpertises, updateDoctor } from "../../services/api";
+import { useCallback } from "react";
 
 export default function DoctorForm() {
 
@@ -25,7 +26,7 @@ export default function DoctorForm() {
 
   const [expertises, setExpertises] = useState([]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
       const responseExpertises = await getExpertises();
@@ -36,7 +37,7 @@ export default function DoctorForm() {
     } catch (error) {
       console.log(error);
     }
-  }
+  }, [setDoctorsList, setIsLoading]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,7 +66,7 @@ export default function DoctorForm() {
 
   useEffect(() => {
     loadData();
-  }, [])
+  }, [loadData])
 
   return (
     <Container>

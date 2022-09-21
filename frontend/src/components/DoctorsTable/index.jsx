@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 
 import { IoPencil, IoClose } from "react-icons/io5"
@@ -17,16 +17,16 @@ export default function DoctorsTable() {
     setFirstExpertise,
     setSecondExpertise } = useContext(DoctorContext);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await getDoctors();
-      setDoctorsList(response.data);
+      const responseDoctors = await getDoctors();
+      setDoctorsList(responseDoctors.data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
-  }
+  }, [setDoctorsList, setIsLoading]);
 
   const handleDeleteDoctor = async (id) => {
     await deleteDoctor(id);
@@ -46,7 +46,7 @@ export default function DoctorsTable() {
 
   useEffect(() => {
     loadData();
-  }, [])
+  }, [loadData])
 
   return (
     <Container>
