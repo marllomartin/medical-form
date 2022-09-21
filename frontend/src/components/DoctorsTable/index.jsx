@@ -1,14 +1,52 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
-import { useAxios } from "../../hooks/useAxios";
 
 import { IoPencil, IoClose } from "react-icons/io5"
 import { ButtonArea, Container, Table } from "./styles";
+import { deleteDoctor, getDoctors } from "../../services/api";
 
 export default function DoctorsTable() {
-  const { search, handleEdit, handleDelete } = useContext(DoctorContext);
+  const {
+    doctorsList, setDoctorsList,
+    isLoading, setIsLoading,
+    search,
+    setIsEditing,
+    setId, setName,
+    setUf, setCrm,
+    setPhone,
+    setFirstExpertise,
+    setSecondExpertise } = useContext(DoctorContext);
 
-  const { data } = useAxios("doctors");
+  const loadData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getDoctors();
+      setDoctorsList(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDeleteDoctor = async (id) => {
+    await deleteDoctor(id);
+    await loadData();
+  }
+
+  const handleEditDoctor = async (id, name, uf, crm, phone, firstExpertise, secondExpertise) => {
+    setIsEditing(true);
+    setId(id);
+    setName(name);
+    setUf(uf);
+    setCrm(crm);
+    setPhone(phone);
+    setFirstExpertise(firstExpertise);
+    setSecondExpertise(secondExpertise);
+  }
+
+  useEffect(() => {
+    loadData();
+  }, [])
 
   return (
     <Container>
@@ -24,43 +62,46 @@ export default function DoctorsTable() {
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          {
-            data?.filter((doctor) =>
-              doctor.name.toLowerCase().includes(search.toLowerCase()) ||
-              doctor.crm.includes(search)
-            ).map((doctor) => (
-              <tr key={doctor.id ? doctor.id : Math.random()}>
-                <td>{doctor.name}</td>
-                <td>{doctor.uf}</td>
-                <td>{doctor.crm}</td>
-                <td>{doctor.phone}</td>
-                <td>{doctor.expertises[0].name}, {doctor.expertises[1].name}</td>
-                <td>
-                  <ButtonArea>
-                    <button
-                      onClick={() =>
-                        handleEdit(doctor.id, doctor.name,
-                          doctor.uf, doctor.crm, doctor.phone,
-                          doctor.expertises[0].id, doctor.expertises[1].id
-                        )
-                      }
-                      className="button-edit"
-                    >
-                      <IoPencil />
-                    </button>
-                    <button
-                      onClick={() => { handleDelete(doctor.id) }}
-                      className="button-delete"
-                    >
-                      <IoClose />
-                    </button>
-                  </ButtonArea>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
+        {isLoading ? <tbody><tr><td>Carregando...</td></tr></tbody> :
+          <tbody>
+            {
+              doctorsList?.filter((doctor) =>
+                doctor.name.toLowerCase().includes(search.toLowerCase()) ||
+                doctor.crm.includes(search)
+              ).map((doctor) => (
+                <tr key={doctor.id}>
+                  <td>{doctor.name}</td>
+                  <td>{doctor.uf}</td>
+                  <td>{doctor.crm}</td>
+                  <td>{doctor.phone}</td>
+                  <td>{doctor.expertises[0].name}, {doctor.expertises[1].name}</td>
+                  <td>
+                    <ButtonArea>
+                      <button
+                        onClick={() => {
+                          handleEditDoctor(doctor.id, doctor.name,
+                            doctor.uf, doctor.crm, doctor.phone,
+                            doctor.expertises[0].id, doctor.expertises[1].id
+                          )
+                        }
+                        }
+                        className="button-edit"
+                      >
+                        <IoPencil />
+                      </button>
+                      <button
+                        onClick={() => { handleDeleteDoctor(doctor.id) }}
+                        className="button-delete"
+                      >
+                        <IoClose />
+                      </button>
+                    </ButtonArea>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        }
       </Table>
     </Container>
   )

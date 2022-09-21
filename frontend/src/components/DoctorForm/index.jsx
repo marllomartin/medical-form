@@ -1,26 +1,71 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css'
 
 import { ButtonArea, Container, Form, InputContainer, InputGroup, SelectContainer } from "./styles";
-import { useAxios } from "../../hooks/useAxios";
+import { createDoctor, getDoctors, getExpertises, updateDoctor } from "../../services/api";
 
 export default function DoctorForm() {
 
   const ufList = ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MT", "MS", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RS", "RO", "RR", "SP", "SC", "SE", "TO", "BR"];
 
   const {
-    name, handleChangeName,
+    setDoctorsList,
+    setIsLoading,
+    isEditing, setIsEditing,
+    id, setId,
+    name, setName, handleChangeName,
     uf, handleChangeUf,
-    crm, handleChangeCrm,
+    crm, setCrm, handleChangeCrm,
     phone, setPhone,
-    firstExpertise, handleChangeFirstExpertise,
-    secondExpertise, handleChangeSecondExpertise,
-    isEditing, handleSubmit
+    firstExpertise, setFirstExpertise, handleChangeFirstExpertise,
+    secondExpertise, setSecondExpertise, handleChangeSecondExpertise
   } = useContext(DoctorContext);
 
-  const { data } = useAxios("expertises");
+  const [expertises, setExpertises] = useState([]);
+
+  const loadData = async () => {
+    try {
+      setIsLoading(true);
+      const responseExpertises = await getExpertises();
+      const responseDoctors = await getDoctors();
+      setExpertises(responseExpertises.data);
+      setDoctorsList(responseDoctors.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const expertises = [
+      { id: firstExpertise },
+      { id: secondExpertise }
+    ];
+
+    if (isEditing) {
+      await updateDoctor(id, name, uf, crm, phone, expertises);
+    } else {
+      await createDoctor(name, uf, crm, phone, expertises);
+    }
+
+    await loadData();
+
+    setName("");
+    setCrm("");
+    setPhone("");
+    setFirstExpertise("1");
+    setSecondExpertise("1");
+    setId(false);
+    setIsEditing(false);
+  }
+
+  useEffect(() => {
+    loadData();
+  }, [])
 
   return (
     <Container>
@@ -86,7 +131,7 @@ export default function DoctorForm() {
               onChange={handleChangeFirstExpertise}
               required={true}
             >
-              {data?.map((expertise) => (
+              {expertises?.map((expertise) => (
                 <option
                   key={expertise.id}
                   value={expertise.id}
@@ -101,7 +146,7 @@ export default function DoctorForm() {
               onChange={handleChangeSecondExpertise}
               required={true}
             >
-              {data?.map((expertise) => (
+              {expertises?.map((expertise) => (
                 <option value={expertise.id} key={expertise.id}>
                   {expertise.name}
                 </option>

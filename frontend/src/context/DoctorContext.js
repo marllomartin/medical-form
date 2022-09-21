@@ -1,12 +1,12 @@
 import React, { createContext, useState } from "react";
 import PropTypes from "prop-types";
-import api from "../services/api";
-import { useAxios } from "../hooks/useAxios";
+import { api, createDoctor, updateDoctor } from "../services/api";
 
 export const DoctorContext = createContext();
 
 export function DoctorContextProvider({ children }) {
-  const { data, mutate } = useAxios("doctors");
+  const [ doctorsList, setDoctorsList ] = useState([]);
+  const [ isLoading, setIsLoading] = useState(true);
 
   const [name, setName] = useState("");
   const [uf, setUf] = useState("AC");
@@ -69,54 +69,37 @@ export function DoctorContextProvider({ children }) {
       { id: secondExpertise }
     ];
 
-    if (id) {
-      api.patch(`doctors/${id}`, { name, uf, crm, phone, expertises });
-
-      const updatedList =
-        data.map((doctor) => {
-          if (doctor.id === id) {
-            return { ...doctor, name, uf, crm, phone, expertises };
-          }
-          return doctor;
-        });
-
-      mutate(updatedList, false);
+    if (isEditing) {
+      updateDoctor(name, uf, crm, phone, expertises);
     } else {
-      const doctor = { name, uf, crm, phone, expertises };
-      api.post("doctors", { name, uf, crm, phone, expertises });
-
-      const updatedList = [...data, doctor];
-      
-      mutate(updatedList, false);
+      createDoctor(name, uf, crm, phone, expertises);
     }
 
     setName("");
     setCrm("");
     setPhone("")
-    setFirstExpertise("");
-    setSecondExpertise("")
+    setFirstExpertise("1");
+    setSecondExpertise("1")
     setId(false);
     setIsEditing(false);
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     api.delete(`doctors/${id}`);
-
-    const updatedList = data?.filter((doctor) => doctor.id !== id);
-
-    mutate(updatedList, false);
 
     setName("");
     setCrm("");
     setPhone("")
-    setFirstExpertise("");
-    setSecondExpertise("")
+    setFirstExpertise("1");
+    setSecondExpertise("1")
     setId(false);
     setIsEditing(false);
   }
 
   return (
     <DoctorContext.Provider value={{
+      doctorsList, setDoctorsList,
+      isLoading, setIsLoading,
       handleChangeName,
       handleChangeUf,
       handleChangeCrm,
