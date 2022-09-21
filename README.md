@@ -25,8 +25,6 @@
   * [react-phone-number-input](https://www.npmjs.com/package/react-phone-number-input)
   * [Styled Components](https://styled-components.com/)
   * [Axios](https://axios-http.com/ptbr/docs/intro)
-  * [SWR](https://swr.vercel.app/pt-BR)
-
 
 ## Rodando o projeto com o Docker (recomendado)
 Caso tenha o Docker configurado em sua máquina, o `docker-compose` fará as orquestrações dos contêiners automaticamente.
