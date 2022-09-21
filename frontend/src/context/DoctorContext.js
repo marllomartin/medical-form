@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
 import PropTypes from "prop-types";
-import { api, createDoctor, updateDoctor } from "../services/api";
 
 export const DoctorContext = createContext();
 
@@ -50,52 +49,6 @@ export function DoctorContextProvider({ children }) {
     setSearch(event.target.value);
   }
 
-  function handleEdit(id, name, uf, crm, phone, firstExpertise, secondExpertise) {
-    setIsEditing(true);
-    setId(id);
-    setName(name);
-    setUf(uf);
-    setCrm(crm);
-    setPhone(phone);
-    setFirstExpertise(firstExpertise);
-    setSecondExpertise(secondExpertise);
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const expertises = [
-      { id: firstExpertise },
-      { id: secondExpertise }
-    ];
-
-    if (isEditing) {
-      updateDoctor(name, uf, crm, phone, expertises);
-    } else {
-      createDoctor(name, uf, crm, phone, expertises);
-    }
-
-    setName("");
-    setCrm("");
-    setPhone("")
-    setFirstExpertise("1");
-    setSecondExpertise("1")
-    setId(false);
-    setIsEditing(false);
-  }
-
-  async function handleDelete(id) {
-    api.delete(`doctors/${id}`);
-
-    setName("");
-    setCrm("");
-    setPhone("")
-    setFirstExpertise("1");
-    setSecondExpertise("1")
-    setId(false);
-    setIsEditing(false);
-  }
-
   return (
     <DoctorContext.Provider value={{
       doctorsList, setDoctorsList,
@@ -107,9 +60,6 @@ export function DoctorContextProvider({ children }) {
       handleChangeFirstExpertise,
       handleChangeSecondExpertise,
       handleChangeSearch,
-      handleEdit,
-      handleSubmit,
-      handleDelete,
       name, setName,
       uf, setUf,
       crm, setCrm,
